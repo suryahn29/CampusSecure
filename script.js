@@ -1,6 +1,9 @@
-// ===============================
-// USERS
-// ===============================
+// ==========================================
+// CAMPUSSECURE - ACCESS CONTROL SYSTEM
+// ==========================================
+
+
+// DEMO USERS
 
 const users = [
     {
@@ -24,12 +27,9 @@ const users = [
 ];
 
 
-// ===============================
-// PERMISSIONS
-// ===============================
+// ROLE PERMISSIONS
 
 const permissions = {
-
     Student: [
         "Library",
         "Computer Lab",
@@ -51,115 +51,155 @@ const permissions = {
         "Admin Block",
         "Server Room"
     ]
-
 };
 
 
-// ===============================
+// DOM ELEMENTS
+
+const loginScreen = document.getElementById("loginScreen");
+const loginForm = document.getElementById("loginForm");
+const loginError = document.getElementById("loginError");
+
+const dashboard = document.getElementById("dashboard");
+
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+
+const sidebarUsername = document.getElementById("sidebarUsername");
+const sidebarRole = document.getElementById("sidebarRole");
+
+const userAvatar = document.getElementById("userAvatar");
+const topAvatar = document.getElementById("topAvatar");
+
+const welcomeText = document.getElementById("welcomeText");
+
+const pageTitle = document.getElementById("pageTitle");
+const breadcrumbText = document.getElementById("breadcrumbText");
+
+const currentDate = document.getElementById("currentDate");
+
+const totalRequests = document.getElementById("totalRequests");
+const grantedCount = document.getElementById("grantedCount");
+const deniedCount = document.getElementById("deniedCount");
+const securityEventText = document.getElementById("securityEventText");
+
+const recentLogsTable = document.getElementById("recentLogsTable");
+const allLogsTable = document.getElementById("allLogsTable");
+
+const alertsContainer = document.getElementById("alertsContainer");
+
+const accessResult = document.getElementById("accessResult");
+
+const clearLogsBtn = document.getElementById("clearLogsBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+
+
 // VARIABLES
-// ===============================
 
 let currentUser = null;
 
 let logs = JSON.parse(localStorage.getItem("campusLogs")) || [];
 
 
-// ===============================
-// DATE
-// ===============================
-
-document.getElementById("currentDate").textContent =
-    new Date().toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "short",
-        year: "numeric"
-    });
-
-
-// ===============================
+// ==========================================
 // LOGIN
-// ===============================
+// ==========================================
 
-document.getElementById("loginForm").addEventListener("submit", function (e) {
+loginForm.addEventListener("submit", function (e) {
 
     e.preventDefault();
 
-    const username = document.getElementById("username").value.trim();
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
 
-    const password = document.getElementById("password").value;
-
-    const user = users.find(function (user) {
-        return user.username === username &&
-               user.password === password;
+    const user = users.find(function (u) {
+        return u.username === username && u.password === password;
     });
 
-    if (user) {
+    if (!user) {
 
-        currentUser = user;
+        loginError.textContent = "Invalid username or password.";
+        loginError.classList.remove("hidden");
 
-        document.getElementById("loginError").textContent = "";
-
-        showDashboard();
-
-    } else {
-
-        document.getElementById("loginError").textContent =
-            "Invalid credentials. Please try again.";
-
+        return;
     }
+
+    loginError.classList.add("hidden");
+
+    currentUser = user;
+
+    showDashboard();
 
 });
 
 
-// ===============================
-// DASHBOARD
-// ===============================
+// ==========================================
+// SHOW DASHBOARD
+// ==========================================
 
 function showDashboard() {
 
-    document.getElementById("loginScreen").classList.add("hidden");
+    loginScreen.classList.add("hidden");
+    dashboard.classList.remove("hidden");
 
-    document.getElementById("dashboard").classList.remove("hidden");
+    sidebarUsername.textContent = currentUser.name;
+    sidebarRole.textContent = currentUser.role;
 
-    document.getElementById("sidebarUsername").textContent =
-        currentUser.name;
+    const initials = currentUser.name
+        .split(" ")
+        .map(word => word.charAt(0))
+        .join("")
+        .toUpperCase();
 
-    document.getElementById("sidebarRole").textContent =
-        currentUser.role;
+    userAvatar.textContent = initials;
+    topAvatar.textContent = initials;
 
-    const initial = currentUser.name.charAt(0).toUpperCase();
+    welcomeText.textContent = `Welcome back, ${currentUser.name}`;
 
-    document.getElementById("userAvatar").textContent = initial;
+    updateDate();
 
-    document.getElementById("topAvatar").textContent = initial;
-
-    document.getElementById("welcomeText").textContent =
-        "Welcome back, " + currentUser.name + ".";
+    updateDashboard();
 
     showPage("overview");
 
 }
 
 
-// ===============================
+// ==========================================
+// DATE
+// ==========================================
+
+function updateDate() {
+
+    const date = new Date();
+
+    const formattedDate = date.toLocaleDateString("en-IN", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
+    if (currentDate) {
+        currentDate.textContent = formattedDate;
+    }
+
+}
+
+
+// ==========================================
 // NAVIGATION
-// ===============================
+// ==========================================
 
-const navButtons = document.querySelectorAll(".nav-item");
+const navItems = document.querySelectorAll(".nav-item");
 
-navButtons.forEach(function (button) {
+navItems.forEach(function (item) {
 
-    button.addEventListener("click", function () {
+    item.addEventListener("click", function () {
 
-        const page = button.dataset.page;
+        const page = item.dataset.page;
 
         showPage(page);
-
-        navButtons.forEach(function (nav) {
-            nav.classList.remove("active");
-        });
-
-        button.classList.add("active");
 
     });
 
@@ -168,168 +208,131 @@ navButtons.forEach(function (button) {
 
 function showPage(page) {
 
-    document.querySelectorAll(".page").forEach(function (section) {
+    const pages = document.querySelectorAll(".page");
 
-        section.classList.add("hidden");
+    pages.forEach(function (p) {
+        p.classList.add("hidden");
+    });
+
+    const targetPage = document.getElementById(page + "Page");
+
+    if (targetPage) {
+        targetPage.classList.remove("hidden");
+    }
+
+    navItems.forEach(function (item) {
+
+        item.classList.remove("active");
+
+        if (item.dataset.page === page) {
+            item.classList.add("active");
+        }
 
     });
 
-    document.getElementById(page + "Page").classList.remove("hidden");
-
-    const pageTitles = {
+    const titles = {
         overview: "Overview",
         access: "Access Control",
         logs: "Access Logs",
         alerts: "Security Alerts"
     };
 
-    document.getElementById("pageTitle").textContent =
-        pageTitles[page];
+    pageTitle.textContent = titles[page] || "Dashboard";
 
-    document.getElementById("breadcrumbText").textContent =
-        page.toUpperCase();
-
-    updateDashboard();
+    breadcrumbText.textContent = "Dashboard / " + (titles[page] || "Dashboard");
 
 }
 
 
-// ===============================
-// VIEW ALL
-// ===============================
+// VIEW ALL BUTTONS
 
 document.querySelectorAll("[data-goto]").forEach(function (button) {
 
     button.addEventListener("click", function () {
 
-        const page = button.dataset.goto;
-
-        showPage(page);
-
-        navButtons.forEach(function (nav) {
-
-            nav.classList.toggle(
-                "active",
-                nav.dataset.page === page
-            );
-
-        });
+        showPage(button.dataset.goto);
 
     });
 
 });
 
 
-// ===============================
-// FACILITY ACCESS
-// ===============================
+// ==========================================
+// ACCESS CONTROL
+// ==========================================
 
-document.querySelectorAll("[data-facility]").forEach(function (button) {
+const accessButtons = document.querySelectorAll("[data-facility]");
+
+accessButtons.forEach(function (button) {
 
     button.addEventListener("click", function () {
 
         const facility = button.dataset.facility;
 
-        requestAccess(facility);
+        checkAccess(facility);
 
     });
 
 });
 
 
-function requestAccess(facility) {
+function checkAccess(facility) {
 
-    if (!currentUser) return;
+    const allowedFacilities = permissions[currentUser.role];
 
-    const userPermissions = permissions[currentUser.role];
+    const granted = allowedFacilities.includes(facility);
 
-    const granted = userPermissions.includes(facility);
+    const log = {
 
-    const logEntry = {
-
-        username: currentUser.username,
-
-        name: currentUser.name,
-
+        username: currentUser.name,
         role: currentUser.role,
-
         facility: facility,
-
         status: granted ? "Granted" : "Denied",
-
         time: new Date().toLocaleString("en-IN")
 
     };
 
+    logs.unshift(log);
 
-    // Store the access attempt
+    saveLogs();
 
-    logs.unshift(logEntry);
-
-    localStorage.setItem(
-        "campusLogs",
-        JSON.stringify(logs)
-    );
-
-
-    // Display result
-
-    showAccessResult(logEntry);
-
-
-    // Refresh dashboard
+    showAccessResult(facility, granted);
 
     updateDashboard();
 
 }
 
 
-// ===============================
+// ==========================================
 // ACCESS RESULT
-// ===============================
+// ==========================================
 
-function showAccessResult(result) {
+function showAccessResult(facility, granted) {
 
-    const container = document.getElementById("accessResult");
+    accessResult.classList.remove("hidden");
+    accessResult.classList.remove("granted", "denied");
 
-    container.className = "access-result";
+    if (granted) {
 
-    container.classList.remove("hidden");
+        accessResult.classList.add("granted");
 
-    if (result.status === "Granted") {
-
-        container.classList.add("granted");
-
-        container.innerHTML = `
-
-            <h3>✓ ACCESS GRANTED</h3>
-
-            <p>User: ${result.username}</p>
-
-            <p>Role: ${result.role}</p>
-
-            <p>Facility: ${result.facility}</p>
-
-            <p>Authorization successful. Permission verified.</p>
-
+        accessResult.innerHTML = `
+            <strong>✓ ACCESS GRANTED</strong><br><br>
+            ${currentUser.name} is authorized to access 
+            <strong>${facility}</strong>.<br>
+            Role: ${currentUser.role}
         `;
 
     } else {
 
-        container.classList.add("denied");
+        accessResult.classList.add("denied");
 
-        container.innerHTML = `
-
-            <h3>✕ ACCESS DENIED</h3>
-
-            <p>User: ${result.username}</p>
-
-            <p>Role: ${result.role}</p>
-
-            <p>Facility: ${result.facility}</p>
-
-            <p>Unauthorized access attempt detected.</p>
-
+        accessResult.innerHTML = `
+            <strong>✕ ACCESS DENIED</strong><br><br>
+            ${currentUser.name} is NOT authorized to access 
+            <strong>${facility}</strong>.<br>
+            Role: ${currentUser.role}<br><br>
+            <strong>Security event recorded.</strong>
         `;
 
     }
@@ -337,39 +340,22 @@ function showAccessResult(result) {
 }
 
 
-// ===============================
-// DASHBOARD STATS
-// ===============================
+// ==========================================
+// UPDATE DASHBOARD
+// ==========================================
 
 function updateDashboard() {
 
     const total = logs.length;
 
-    const granted = logs.filter(function (log) {
+    const granted = logs.filter(log => log.status === "Granted").length;
 
-        return log.status === "Granted";
+    const denied = logs.filter(log => log.status === "Denied").length;
 
-    }).length;
-
-    const denied = logs.filter(function (log) {
-
-        return log.status === "Denied";
-
-    }).length;
-
-
-    document.getElementById("totalRequests").textContent = total;
-
-    document.getElementById("grantedCount").textContent = granted;
-
-    document.getElementById("deniedCount").textContent = denied;
-
-
-    document.getElementById("securityEventText").textContent =
-        denied === 0
-            ? "No events recorded"
-            : denied + " unauthorized attempts";
-
+    totalRequests.textContent = total;
+    grantedCount.textContent = granted;
+    deniedCount.textContent = denied;
+    securityEventText.textContent = denied;
 
     renderLogs();
 
@@ -378,175 +364,195 @@ function updateDashboard() {
 }
 
 
-// ===============================
-// LOGS
-// ===============================
+// ==========================================
+// RENDER LOGS
+// ==========================================
 
 function renderLogs() {
 
-    const recentTable =
-        document.getElementById("recentLogsTable");
+    // RECENT LOGS
 
-    const allTable =
-        document.getElementById("allLogsTable");
+    const recentLogs = logs.slice(0, 5);
 
-    recentTable.innerHTML = "";
+    if (recentLogs.length === 0) {
 
-    allTable.innerHTML = "";
+        recentLogsTable.innerHTML = `
+            <tr>
+                <td colspan="3" class="empty-table">
+                    No access activity yet.
+                </td>
+            </tr>
+        `;
+
+    } else {
+
+        recentLogsTable.innerHTML = recentLogs.map(function (log) {
+
+            const statusClass = log.status === "Granted"
+                ? "status-granted"
+                : "status-denied";
+
+            return `
+                <tr>
+                    <td>${log.username}</td>
+                    <td>${log.facility}</td>
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            ${log.status}
+                        </span>
+                    </td>
+                </tr>
+            `;
+
+        }).join("");
+
+    }
 
 
-    logs.slice(0, 5).forEach(function (log) {
+    // ALL LOGS
 
-        recentTable.innerHTML += createLogRow(log);
+    if (logs.length === 0) {
 
-    });
+        allLogsTable.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty-table">
+                    No logs available.
+                </td>
+            </tr>
+        `;
 
+    } else {
 
-    logs.forEach(function (log) {
+        allLogsTable.innerHTML = logs.map(function (log) {
 
-        allTable.innerHTML += createLogRow(log);
+            const statusClass = log.status === "Granted"
+                ? "status-granted"
+                : "status-denied";
 
-    });
+            return `
+                <tr>
+                    <td>${log.username}</td>
+                    <td>${log.role}</td>
+                    <td>${log.facility}</td>
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            ${log.status}
+                        </span>
+                    </td>
+                    <td>${log.time}</td>
+                </tr>
+            `;
+
+        }).join("");
+
+    }
 
 }
 
 
-function createLogRow(log) {
-
-    const badgeClass =
-        log.status === "Granted"
-            ? "granted-badge"
-            : "denied-badge";
-
-    return `
-
-        <tr>
-
-            <td>${log.username}</td>
-
-            <td>${log.facility}</td>
-
-            <td>${log.role}</td>
-
-            <td>
-                <span class="badge ${badgeClass}">
-                    ${log.status}
-                </span>
-            </td>
-
-            <td>${log.time}</td>
-
-        </tr>
-
-    `;
-
-}
-
-
-// ===============================
+// ==========================================
 // SECURITY ALERTS
-// ===============================
+// ==========================================
 
 function renderAlerts() {
 
-    const container =
-        document.getElementById("alertsContainer");
-
     const deniedLogs = logs.filter(function (log) {
-
         return log.status === "Denied";
-
     });
-
-    container.innerHTML = "";
-
 
     if (deniedLogs.length === 0) {
 
-        container.innerHTML = `
-
-            <div class="security-status-card">
-
-                <div class="security-status-icon">✓</div>
-
-                <div>
-                    <h4>No security alerts</h4>
-                    <p>No unauthorized attempts detected.</p>
-                </div>
-
+        alertsContainer.innerHTML = `
+            <div class="empty-state">
+                <span>🛡️</span>
+                <p>No security alerts detected.</p>
             </div>
-
         `;
 
         return;
 
     }
 
+    alertsContainer.innerHTML = deniedLogs.map(function (log) {
 
-    deniedLogs.forEach(function (log) {
-
-        container.innerHTML += `
-
+        return `
             <div class="alert-card">
 
-                <strong>△ Unauthorized access detected</strong>
+                <strong style="color:#f87171">
+                    ⚠ Unauthorized Access Attempt
+                </strong>
 
-                <p>User: ${log.username}</p>
+                <p style="margin-top:12px;color:#cbd5e1;font-size:13px">
+                    <strong>User:</strong> ${log.username}
+                </p>
 
-                <p>Role: ${log.role}</p>
+                <p style="margin-top:7px;color:#cbd5e1;font-size:13px">
+                    <strong>Role:</strong> ${log.role}
+                </p>
 
-                <p>Facility: ${log.facility}</p>
+                <p style="margin-top:7px;color:#cbd5e1;font-size:13px">
+                    <strong>Facility:</strong> ${log.facility}
+                </p>
 
-                <p>Access denied by the authorization system.</p>
-
-                <small>${log.time}</small>
+                <p style="margin-top:7px;color:#8b9890;font-size:12px">
+                    ${log.time}
+                </p>
 
             </div>
-
         `;
 
-    });
+    }).join("");
 
 }
 
 
-// ===============================
+// ==========================================
+// SAVE LOGS
+// ==========================================
+
+function saveLogs() {
+
+    localStorage.setItem("campusLogs", JSON.stringify(logs));
+
+}
+
+
+// ==========================================
 // CLEAR LOGS
-// ===============================
+// ==========================================
 
-document.getElementById("clearLogsBtn").addEventListener("click", function () {
+clearLogsBtn.addEventListener("click", function () {
 
-    const confirmed = confirm("Clear all access logs?");
+    const confirmClear = confirm("Are you sure you want to clear all access logs?");
 
-    if (confirmed) {
-
-        logs = [];
-
-        localStorage.removeItem("campusLogs");
-
-        updateDashboard();
-
+    if (!confirmClear) {
+        return;
     }
+
+    logs = [];
+
+    saveLogs();
+
+    updateDashboard();
 
 });
 
 
-// ===============================
+// ==========================================
 // LOGOUT
-// ===============================
+// ==========================================
 
-document.getElementById("logoutBtn").addEventListener("click", function () {
+logoutBtn.addEventListener("click", function () {
 
     currentUser = null;
 
-    document.getElementById("dashboard").classList.add("hidden");
+    dashboard.classList.add("hidden");
+    loginScreen.classList.remove("hidden");
 
-    document.getElementById("loginScreen").classList.remove("hidden");
+    loginForm.reset();
 
-    document.getElementById("loginForm").reset();
+    loginError.classList.add("hidden");
 
-    document.getElementById("loginError").textContent = "";
-
-    document.getElementById("accessResult").classList.add("hidden");
+    accessResult.classList.add("hidden");
 
 });
