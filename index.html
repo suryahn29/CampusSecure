@@ -3,608 +3,442 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusSecure | Access Control</title>
-
+    <title>CampusSecure</title>
     <link rel="stylesheet" href="style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<!-- LOGIN SCREEN -->
+    <!-- LOGIN PAGE -->
+    <div id="login-page" class="login-page">
+        <div class="login-card">
 
-<div id="loginScreen" class="login-screen">
-
-    <div class="login-card">
-
-        <div class="brand">
-            <div class="brand-icon">⌘</div>
-            <span>campus<span class="brand-accent">secure</span></span>
-        </div>
-
-        <div class="login-heading">
-            <p class="eyebrow">SECURE ACCESS PORTAL</p>
-            <h1>Welcome<br>back.</h1>
-            <p class="subtitle">Sign in to access the campus security system.</p>
-        </div>
-
-        <form id="loginForm">
-
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input
-                    type="text"
-                    id="username"
-                    placeholder="Enter your username"
-                    required
-                >
+            <div class="login-logo">
+                <div class="logo-icon">🛡️</div>
+                <h1>CampusSecure</h1>
+                <p>Campus Access Control System</p>
             </div>
 
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    required
-                >
+            <div class="login-heading">
+                <h2>Welcome Back</h2>
+                <p>Sign in to access your dashboard</p>
             </div>
 
-            <p id="loginError"></p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter your username"
+                        required
+                    >
+                </div>
 
-            <button type="submit" class="login-button">
-                Sign in
-                <span>↗</span>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Sign In
+                </button>
+
+                <p id="login-error" class="login-error"></p>
+            </form>
+
+            <div class="login-footer">
+                <p>CampusSecure Security System</p>
+                <span>Protected Campus Access</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="app" class="app-container" style="display: none;">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span>🛡️</span>
+                    <div>
+                        <h2>CampusSecure</h2>
+                        <p>Security Management</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NAVIGATION -->
+            <nav class="nav-menu">
+
+                <button class="nav-item active" data-page="overview">
+                    <span class="nav-icon">▦</span>
+                    <span>Overview</span>
+                </button>
+
+                <button class="nav-item" data-page="access">
+                    <span class="nav-icon">🔐</span>
+                    <span>Access Control</span>
+                </button>
+
+                <button class="nav-item" data-page="logs">
+                    <span class="nav-icon">📋</span>
+                    <span>Access Logs</span>
+                </button>
+
+                <button class="nav-item" data-page="alerts">
+                    <span class="nav-icon">🚨</span>
+                    <span>Security Alerts</span>
+                </button>
+
+            </nav>
+
+            <!-- SIDEBAR BOTTOM -->
+            <div class="sidebar-bottom">
+
+                <div class="system-status">
+                    <span class="status-dot"></span>
+                    <div>
+                        <strong>System Online</strong>
+                        <small>All systems operational</small>
+                    </div>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-avatar" id="user-avatar">U</div>
+
+                    <div class="user-info">
+                        <strong id="logged-user">User</strong>
+                        <small id="logged-role">Role</small>
+                    </div>
+
+                    <button id="logout-btn" class="logout-btn" title="Logout">
+                        ↪
+                    </button>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- OVERVIEW PAGE -->
+            <section id="overview-page" class="page active">
+
+                <div class="page-header">
+                    <div>
+                        <h1>Overview</h1>
+                        <p>Campus security and access monitoring dashboard</p>
+                    </div>
+
+                    <div class="header-status">
+                        <span class="status-dot"></span>
+                        System Active
+                    </div>
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-icon total-icon">▦</div>
+                        <div class="stat-info">
+                            <p>Total Access Attempts</p>
+                            <h2 id="total-attempts">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon granted-icon">✓</div>
+                        <div class="stat-info">
+                            <p>Access Granted</p>
+                            <h2 id="granted-count">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon denied-icon">✕</div>
+                        <div class="stat-info">
+                            <p>Access Denied</p>
+                            <h2 id="denied-count">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon alert-icon">⚠</div>
+                        <div class="stat-info">
+                            <p>Security Alerts</p>
+                            <h2 id="alert-count">0</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- OVERVIEW CONTENT -->
+                <div class="overview-grid">
+
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3>Campus Facilities</h3>
+                            <span>Access monitored</span>
+                        </div>
+
+                        <div class="facility-grid">
+
+                            <div class="facility-card">
+                                <div class="facility-icon">📚</div>
+                                <h3>Library</h3>
+                                <p>Academic Resource Center</p>
+                                <span class="facility-status">Protected</span>
+                            </div>
+
+                            <div class="facility-card">
+                                <div class="facility-icon">💻</div>
+                                <h3>Computer Lab</h3>
+                                <p>Computing Facilities</p>
+                                <span class="facility-status">Protected</span>
+                            </div>
+
+                            <div class="facility-card">
+                                <div class="facility-icon">🏫</div>
+                                <h3>Classroom</h3>
+                                <p>Academic Building</p>
+                                <span class="facility-status">Protected</span>
+                            </div>
+
+                            <div class="facility-card">
+                                <div class="facility-icon">👨‍🏫</div>
+                                <h3>Faculty Room</h3>
+                                <p>Faculty Workspace</p>
+                                <span class="facility-status">Protected</span>
+                            </div>
+
+                            <div class="facility-card">
+                                <div class="facility-icon">🏢</div>
+                                <h3>Admin Block</h3>
+                                <p>Administrative Offices</p>
+                                <span class="facility-status">Restricted</span>
+                            </div>
+
+                            <div class="facility-card">
+                                <div class="facility-icon">🖥️</div>
+                                <h3>Server Room</h3>
+                                <p>Infrastructure Center</p>
+                                <span class="facility-status restricted-status">Highly Restricted</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- RECENT ACTIVITY -->
+                    <div class="content-card recent-activity-card">
+                        <div class="card-header">
+                            <h3>Recent Activity</h3>
+                            <button class="text-btn" data-page="logs">View All</button>
+                        </div>
+
+                        <div id="recent-activity">
+                            <div class="empty-state">
+                                <span>📋</span>
+                                <p>No activity recorded yet</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- ACCESS CONTROL PAGE -->
+            <section id="access-page" class="page">
+
+                <div class="page-header">
+                    <div>
+                        <h1>Access Control</h1>
+                        <p>Manage and simulate facility access requests</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+
+                    <div class="card-header">
+                        <h3>Campus Facilities</h3>
+                        <span>Request access to a facility</span>
+                    </div>
+
+                    <div class="facility-grid access-facility-grid">
+
+                        <div class="facility-card access-card">
+                            <div class="facility-icon">📚</div>
+                            <h3>Library</h3>
+                            <p>Academic Resource Center</p>
+                            <button class="access-btn" data-facility="Library">
+                                Request Access
+                            </button>
+                        </div>
+
+                        <div class="facility-card access-card">
+                            <div class="facility-icon">💻</div>
+                            <h3>Computer Lab</h3>
+                            <p>Computing Facilities</p>
+                            <button class="access-btn" data-facility="Computer Lab">
+                                Request Access
+                            </button>
+                        </div>
+
+                        <div class="facility-card access-card">
+                            <div class="facility-icon">🏫</div>
+                            <h3>Classroom</h3>
+                            <p>Academic Building</p>
+                            <button class="access-btn" data-facility="Classroom">
+                                Request Access
+                            </button>
+                        </div>
+
+                        <div class="facility-card access-card">
+                            <div class="facility-icon">👨‍🏫</div>
+                            <h3>Faculty Room</h3>
+                            <p>Faculty Workspace</p>
+                            <button class="access-btn" data-facility="Faculty Room">
+                                Request Access
+                            </button>
+                        </div>
+
+                        <div class="facility-card access-card">
+                            <div class="facility-icon">🏢</div>
+                            <h3>Admin Block</h3>
+                            <p>Administrative Offices</p>
+                            <button class="access-btn" data-facility="Admin Block">
+                                Request Access
+                            </button>
+                        </div>
+
+                        <div class="facility-card access-card">
+                            <div class="facility-icon">🖥️</div>
+                            <h3>Server Room</h3>
+                            <p>Infrastructure Center</p>
+                            <button class="access-btn" data-facility="Server Room">
+                                Request Access
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- ACCESS LOGS PAGE -->
+            <section id="logs-page" class="page">
+
+                <div class="page-header">
+                    <div>
+                        <h1>Access Logs</h1>
+                        <p>Historical record of campus access attempts</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+
+                    <div class="card-header">
+                        <h3>Access History</h3>
+                        <button id="clear-logs-btn" class="text-btn">
+                            Clear Logs
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Facility</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="logs-table-body">
+                                <tr>
+                                    <td colspan="6" class="empty-table">
+                                        No access records available
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- SECURITY ALERTS PAGE -->
+            <section id="alerts-page" class="page">
+
+                <div class="page-header">
+                    <div>
+                        <h1>Security Alerts</h1>
+                        <p>Monitor denied access attempts and security events</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+
+                    <div class="card-header">
+                        <h3>Security Events</h3>
+                        <span class="alert-indicator">Monitoring Active</span>
+                    </div>
+
+                    <div id="alerts-container">
+
+                        <div class="empty-state">
+                            <span>🛡️</span>
+                            <p>No security alerts detected</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- ACCESS RESULT MODAL -->
+    <div id="access-modal" class="modal-overlay">
+
+        <div class="modal-card" id="modal-card">
+
+            <div class="modal-icon" id="modal-icon"></div>
+
+            <h2 id="modal-title"></h2>
+
+            <p id="modal-message"></p>
+
+            <button id="modal-close" class="modal-btn">
+                Continue
             </button>
 
-        </form>
-
-        <div class="demo-info">
-            <div class="demo-title">
-                <span class="demo-dot"></span>
-                DEMO ACCESS
-            </div>
-
-            <div class="demo-accounts">
-                <p><span>Student</span> student01 / 1234</p>
-                <p><span>Faculty</span> faculty01 / 1234</p>
-                <p><span>Admin</span> admin01 / 1234</p>
-            </div>
-        </div>
-
-        <div class="login-footer">
-            <span>◈ CAMPUS SECURITY SYSTEM</span>
-            <span>v1.0.0</span>
         </div>
 
     </div>
 
-    <div class="login-decoration">
-        <div class="decoration-circle"></div>
-        <div class="decoration-circle circle-two"></div>
-    </div>
-
-</div>
-
-
-<!-- DASHBOARD -->
-
-<div id="dashboard" class="dashboard hidden">
-
-    <!-- SIDEBAR -->
-
-    <aside class="sidebar">
-
-        <div class="brand sidebar-brand">
-            <div class="brand-icon">⌘</div>
-            <span>campus<span class="brand-accent">secure</span></span>
-        </div>
-
-        <div class="sidebar-label">WORKSPACE</div>
-
-        <nav class="navigation">
-
-            <button class="nav-item active" data-page="overview">
-                <span class="nav-icon">◫</span>
-                <span>Overview</span>
-            </button>
-
-            <button class="nav-item" data-page="access">
-                <span class="nav-icon">⌑</span>
-                <span>Access Control</span>
-            </button>
-
-            <button class="nav-item" data-page="logs">
-                <span class="nav-icon">≡</span>
-                <span>Access Logs</span>
-            </button>
-
-            <button class="nav-item" data-page="alerts">
-                <span class="nav-icon">△</span>
-                <span>Security Alerts</span>
-            </button>
-
-        </nav>
-
-        <div class="sidebar-bottom">
-
-            <div class="system-card">
-                <div class="system-card-top">
-                    <span class="live-dot"></span>
-                    System operational
-                </div>
-                <p>All security systems running normally.</p>
-            </div>
-
-            <div class="profile">
-
-                <div class="profile-avatar" id="userAvatar">S</div>
-
-                <div class="profile-info">
-                    <strong id="sidebarUsername">User</strong>
-                    <span id="sidebarRole">Role</span>
-                </div>
-
-                <button id="logoutBtn" class="logout-button" title="Logout">↗</button>
-
-            </div>
-
-        </div>
-
-    </aside>
-
-
-    <!-- MAIN -->
-
-    <main class="main-content">
-
-        <header class="topbar">
-
-            <div>
-                <div class="breadcrumb">WORKSPACE / <span id="breadcrumbText">OVERVIEW</span></div>
-                <h1 id="pageTitle">Overview</h1>
-            </div>
-
-            <div class="topbar-right">
-
-                <div class="date-display" id="currentDate"></div>
-
-                <div class="top-profile-avatar" id="topAvatar">S</div>
-
-            </div>
-
-        </header>
-
-
-        <!-- OVERVIEW -->
-
-        <section id="overviewPage" class="page">
-
-            <div class="welcome-section">
-
-                <div>
-                    <span class="welcome-label">YOUR SECURITY DASHBOARD</span>
-                    <h2 id="welcomeText">Welcome back.</h2>
-                    <p>Here's what's happening across campus today.</p>
-                </div>
-
-                <div class="welcome-decoration">⌘</div>
-
-            </div>
-
-
-            <!-- STATS -->
-
-            <div class="stats-grid">
-
-                <div class="stat-card">
-
-                    <div class="stat-card-header">
-                        <span>Total Requests</span>
-                        <div class="stat-symbol">↗</div>
-                    </div>
-
-                    <h2 id="totalRequests">0</h2>
-
-                    <p class="stat-description">Access attempts recorded</p>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-card-header">
-                        <span>Granted</span>
-                        <div class="stat-symbol success-symbol">✓</div>
-                    </div>
-
-                    <h2 id="grantedCount">0</h2>
-
-                    <p class="stat-description success-text">Authorized entries</p>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-card-header">
-                        <span>Denied</span>
-                        <div class="stat-symbol danger-symbol">×</div>
-                    </div>
-
-                    <h2 id="deniedCount">0</h2>
-
-                    <p class="stat-description danger-text">Unauthorized attempts</p>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-card-header">
-                        <span>Protected Zones</span>
-                        <div class="stat-symbol">⌂</div>
-                    </div>
-
-                    <h2>06</h2>
-
-                    <p class="stat-description">Campus facilities</p>
-
-                </div>
-
-            </div>
-
-
-            <!-- CONTENT GRID -->
-
-            <div class="content-grid">
-
-
-                <!-- FACILITIES -->
-
-                <div class="panel facilities-panel">
-
-                    <div class="panel-heading">
-
-                        <div>
-                            <h3>Campus facilities</h3>
-                            <p>Request access to a secured location.</p>
-                        </div>
-
-                        <span class="panel-tag">6 ZONES</span>
-
-                    </div>
-
-
-                    <div class="facility-grid">
-
-                        <button class="facility-card" data-facility="Library">
-                            <div class="facility-top">
-                                <span class="facility-icon">▤</span>
-                                <span class="facility-arrow">↗</span>
-                            </div>
-                            <h4>Library</h4>
-                            <p>Knowledge center</p>
-                        </button>
-
-
-                        <button class="facility-card" data-facility="Computer Lab">
-                            <div class="facility-top">
-                                <span class="facility-icon">⌘</span>
-                                <span class="facility-arrow">↗</span>
-                            </div>
-                            <h4>Computer Lab</h4>
-                            <p>Technical facility</p>
-                        </button>
-
-
-                        <button class="facility-card" data-facility="Classroom">
-                            <div class="facility-top">
-                                <span class="facility-icon">▣</span>
-                                <span class="facility-arrow">↗</span>
-                            </div>
-                            <h4>Classroom</h4>
-                            <p>Academic zone</p>
-                        </button>
-
-
-                        <button class="facility-card" data-facility="Faculty Room">
-                            <div class="facility-top">
-                                <span class="facility-icon">♙</span>
-                                <span class="facility-arrow">↗</span>
-                            </div>
-                            <h4>Faculty Room</h4>
-                            <p>Staff access</p>
-                        </button>
-
-
-                        <button class="facility-card" data-facility="Admin Block">
-                            <div class="facility-top">
-                                <span class="facility-icon">▥</span>
-                                <span class="facility-arrow">↗</span>
-                            </div>
-                            <h4>Admin Block</h4>
-                            <p>Restricted area</p>
-                        </button>
-
-
-                        <button class="facility-card" data-facility="Server Room">
-                            <div class="facility-top">
-                                <span class="facility-icon">▦</span>
-                                <span class="facility-arrow">↗</span>
-                            </div>
-                            <h4>Server Room</h4>
-                            <p>High security</p>
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- SECURITY STATUS -->
-
-                <div class="panel security-panel">
-
-                    <div class="panel-heading">
-                        <div>
-                            <h3>Security status</h3>
-                            <p>System health overview.</p>
-                        </div>
-                    </div>
-
-
-                    <div class="security-status-card">
-
-                        <div class="security-status-icon">✓</div>
-
-                        <div>
-                            <h4>Everything looks good</h4>
-                            <p>No system issues detected.</p>
-                        </div>
-
-                    </div>
-
-
-                    <div class="security-list">
-
-                        <div class="security-row">
-                            <div class="security-row-icon">⌑</div>
-                            <div>
-                                <strong>Access monitoring</strong>
-                                <span>Active</span>
-                            </div>
-                            <div class="status-pill">LIVE</div>
-                        </div>
-
-
-                        <div class="security-row">
-                            <div class="security-row-icon">◈</div>
-                            <div>
-                                <strong>Authentication</strong>
-                                <span>Secure verification</span>
-                            </div>
-                            <div class="status-pill">ON</div>
-                        </div>
-
-
-                        <div class="security-row">
-                            <div class="security-row-icon">△</div>
-                            <div>
-                                <strong>Security alerts</strong>
-                                <span id="securityEventText">No events</span>
-                            </div>
-                            <div class="alert-indicator"></div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- RECENT LOGS -->
-
-            <div class="panel logs-panel">
-
-                <div class="panel-heading">
-
-                    <div>
-                        <h3>Recent activity</h3>
-                        <p>Latest access attempts across campus.</p>
-                    </div>
-
-                    <button class="view-all-button" data-goto="logs">
-                        View all <span>↗</span>
-                    </button>
-
-                </div>
-
-
-                <div class="table-container">
-
-                    <table>
-
-                        <thead>
-                            <tr>
-                                <th>USER</th>
-                                <th>FACILITY</th>
-                                <th>ROLE</th>
-                                <th>STATUS</th>
-                                <th>TIME</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="recentLogsTable"></tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ACCESS PAGE -->
-
-        <section id="accessPage" class="page hidden">
-
-            <div class="panel access-main-panel">
-
-                <div class="panel-heading">
-                    <div>
-                        <h3>Facility access</h3>
-                        <p>Choose a facility to verify your permissions.</p>
-                    </div>
-                </div>
-
-
-                <div class="facility-grid">
-
-                    <button class="facility-card" data-facility="Library">
-                        <div class="facility-top">
-                            <span class="facility-icon">▤</span>
-                            <span class="facility-arrow">↗</span>
-                        </div>
-                        <h4>Library</h4>
-                        <p>Knowledge center</p>
-                    </button>
-
-
-                    <button class="facility-card" data-facility="Computer Lab">
-                        <div class="facility-top">
-                            <span class="facility-icon">⌘</span>
-                            <span class="facility-arrow">↗</span>
-                        </div>
-                        <h4>Computer Lab</h4>
-                        <p>Technical facility</p>
-                    </button>
-
-
-                    <button class="facility-card" data-facility="Classroom">
-                        <div class="facility-top">
-                            <span class="facility-icon">▣</span>
-                            <span class="facility-arrow">↗</span>
-                        </div>
-                        <h4>Classroom</h4>
-                        <p>Academic zone</p>
-                    </button>
-
-
-                    <button class="facility-card" data-facility="Faculty Room">
-                        <div class="facility-top">
-                            <span class="facility-icon">♙</span>
-                            <span class="facility-arrow">↗</span>
-                        </div>
-                        <h4>Faculty Room</h4>
-                        <p>Staff access</p>
-                    </button>
-
-
-                    <button class="facility-card" data-facility="Admin Block">
-                        <div class="facility-top">
-                            <span class="facility-icon">▥</span>
-                            <span class="facility-arrow">↗</span>
-                        </div>
-                        <h4>Admin Block</h4>
-                        <p>Restricted area</p>
-                    </button>
-
-
-                    <button class="facility-card" data-facility="Server Room">
-                        <div class="facility-top">
-                            <span class="facility-icon">▦</span>
-                            <span class="facility-arrow">↗</span>
-                        </div>
-                        <h4>Server Room</h4>
-                        <p>High security</p>
-                    </button>
-
-                </div>
-
-
-                <div id="accessResult" class="access-result hidden"></div>
-
-            </div>
-
-        </section>
-
-
-        <!-- LOGS PAGE -->
-
-        <section id="logsPage" class="page hidden">
-
-            <div class="panel">
-
-                <div class="panel-heading">
-
-                    <div>
-                        <h3>Access history</h3>
-                        <p>Complete record of access requests.</p>
-                    </div>
-
-                    <button id="clearLogsBtn" class="clear-button">Clear logs</button>
-
-                </div>
-
-
-                <div class="table-container">
-
-                    <table>
-
-                        <thead>
-                            <tr>
-                                <th>USER</th>
-                                <th>FACILITY</th>
-                                <th>ROLE</th>
-                                <th>STATUS</th>
-                                <th>TIME</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="allLogsTable"></tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ALERTS PAGE -->
-
-        <section id="alertsPage" class="page hidden">
-
-            <div class="panel">
-
-                <div class="panel-heading">
-                    <div>
-                        <h3>Security alerts</h3>
-                        <p>Unauthorized access attempts.</p>
-                    </div>
-                </div>
-
-                <div id="alertsContainer"></div>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-</div>
-
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
